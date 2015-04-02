@@ -31,7 +31,9 @@ plot_data_frame = function(dataset, var_name) {
     i = i + 1
   }
   
-  legend("topleft", legend=labels, pch=rep(1, length(labels)), col=1:i)
+  if (i > 1) {
+    legend("topleft", legend=labels, pch=rep(1, length(labels)), col=1:i)
+  }
 }
 
 
