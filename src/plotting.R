@@ -23,7 +23,7 @@ plot_data_frame = function(dataset, var_name) {
            y=dataset$Y[dataset$Z==label], 
            xlim=c(min(dataset[, var_name]), max(dataset[, var_name])), 
            ylim=c(min(dataset$Y), max(dataset$Y)), 
-           ylab="y", xlab=var_name, col=i)
+           ylab=names(dataset)[length(names(dataset))], xlab=var_name, col=i)
     } else {
       points(x=dataset[, var_name][dataset$Z==label], 
              y=dataset$Y[dataset$Z==label], col=i)
