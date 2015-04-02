@@ -2,20 +2,69 @@
 # This script is to compare the OLS vs. BART on the data.
 ################################################################################
 
-### linear fit
-# fit on training data
-ols_fit0 = lm(Y ~ ., data=data_train)
-
-# decompose test data
+# decompose datasets by variable names
+Y_train = data_train[ , length(data_train[1, ])]
+Z_train = data_train[ , 1]
+X_train = data_train[ , 2:(length(data_train[1, ]) - 1)]
 Y_test = data_test[ , length(data_test[1, ])]
 Z_test = data_test[ , 1]
-X_test = data_test[ , 1:(length(data_test[1, ]) - 1)]
+X_test = data_test[ , 2:(length(data_test[1, ]) - 1)]
+
+
+### OLS fit on whole training data
+ols_fit0 = lm(Y ~ ., data=data_train)
 
 # get predictions
-Y_test_hat_ols = predict(ols_fit, X_test)
+Y_hat_ols_whole = predict(ols_fit, data.frame(Z=Z_test, X_test))
 
 # get error rate
-error_ols = Y_test - Y_test_hat_ols
-MSE_ols = mean(error_ols^2)
+error_ols_whole = Y_test - Y_hat_ols_whole
+MSE_ols_whole = mean(error_ols_whole^2)
 
+
+### BART fit on whole training data
 library(BayesTree)
+bart_obj_whole = bart(x.train=data.frame(Z=Z_train, X_train), y.train=Y_train, 
+                x.test=data.frame(Z=Z_test, X_test))
+
+# get pridictions
+Y_hat_bart_whole = bart_obj_whole$yhat.test.mean
+
+# get error rate
+error_bart_whole = Y_test - Y_hat_bart_whole
+MSE_bart_whole = mean(error_bart_whole^2)
+
+
+### OLS and BART fit on separate treatment labels
+labels = unique(Z_test)
+error_ols_separate = NULL
+error_bart_separate = NULL
+
+for (lable in lables) {
+  # subsetting
+  X_train_label = X_train[Z_train==label, ]
+  Y_train_label = Y_train[Z_train==label]
+  X_test_label = X_test[Z_test==label, ]
+  Y_test_label = Y_test[Z_test==label]
+  data_train_label = data_train[Z_train==label, ]
+  data_test_label = data_test[Z_test==label, ]
+  
+  # fitting
+  ols_fit_label = lm(Y_train_label ~ ., data=data_train_label)
+  Y_hat_ols_label = predict(ols_fit_label, data.frame(Z=Z_test, X_test_label))
+  error_ols_label = Y_test_label - Y_hat_ols_label
+  
+  bart_obj_label = bart(x.train=data.frame(Z=label, X_train_label), 
+                        y.train=Y_train_label, 
+                        x.test=data.frame(Z=Z_test, X_test))
+  Y_hat_bart_label = bart_obj_label$yhat.test.mean
+  
+  
+  error_ols_separate = c(error_ols_separate, error_ols_label)
+  error_bart_separate = c(error_bart_separate, error_bart_label)
+}
+
+MSE_ols_separate = mean(error_ols_separate^2)
+MSE_bart_separate = mean(error_bart_separate^2)
+
+### plotting errors

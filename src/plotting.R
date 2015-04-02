@@ -14,19 +14,19 @@
 plot_data_frame = function(dataset, var_name) {
   i = 1 #color indicator
   
-  labels = unique(dataset$Z)
+  labels = unique(dataset[, 1])
   for (label in labels) {
     print(label)
     print(var_name)
     if (i == 1) {
-      plot(x=dataset[, var_name][dataset$Z==label], 
-           y=dataset$Y[dataset$Z==label], 
+      plot(x=dataset[, var_name][dataset[, 1]==label], 
+           y=dataset[, length(dataset[1, ])][dataset[, 1]==label], 
            xlim=c(min(dataset[, var_name]), max(dataset[, var_name])), 
-           ylim=c(min(dataset$Y), max(dataset$Y)), 
+           ylim=c(min(dataset[, length(dataset[1, ])]), max(dataset[, length(dataset[1, ])])), 
            ylab=names(dataset)[length(names(dataset))], xlab=var_name, col=i)
     } else {
-      points(x=dataset[, var_name][dataset$Z==label], 
-             y=dataset$Y[dataset$Z==label], col=i)
+      points(x=dataset[, var_name][dataset[, 1]==label], 
+             y=dataset[, length(dataset[1, ])][dataset[, 1]==label], col=i)
     }
     i = i + 1
   }
