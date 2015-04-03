@@ -12,7 +12,7 @@ X_test = data_test[ , 2:(length(data_test[1, ]) - 1)]
 
 
 ### OLS fit on whole training data
-ols_fit0 = lm(Y ~ ., data=data_train)
+ols_fit = lm(Y ~ ., data=data_train)
 
 # get predictions
 Y_hat_ols_whole = predict(ols_fit, data.frame(Z=Z_test, X_test))
@@ -36,11 +36,13 @@ MSE_bart_whole = mean(error_bart_whole^2)
 
 
 ### OLS and BART fit on separate treatment labels
-labels = unique(Z_test)
 error_ols_separate = NULL
 error_bart_separate = NULL
+Y_hat_ols_separate = NULL
+Y_hat_bart_separate = NULL
 
-for (lable in lables) {
+labels = unique(Z_test)
+for (label in labels) {
   # subsetting
   X_train_label = X_train[Z_train==label, ]
   Y_train_label = Y_train[Z_train==label]
@@ -62,9 +64,23 @@ for (lable in lables) {
   
   error_ols_separate = c(error_ols_separate, error_ols_label)
   error_bart_separate = c(error_bart_separate, error_bart_label)
+  Y_hat_ols_separate = c(Y_hat_ols_separate, Y_hat_ols_label)
+  Y_hat_bart_separate = c(Y_hat_bart_separate, Y_hat_bart_label)
 }
 
 MSE_ols_separate = mean(error_ols_separate^2)
 MSE_bart_separate = mean(error_bart_separate^2)
 
 ### plotting errors
+# fitted with whole data
+methods = c(rep("ols", length(error_ols_whole)), 
+                 rep("bart", length(error_bart_whole)))
+errors_whole = c(error_ols_whole, error_bart_whole)
+Y_hat_whole = c(Y_hat_ols_whole, Y_hat_bart_whole)
+errors_whole = data.frame(methods=methods, Y_hat=Y_hat_whole, errors=errors_whole)
+
+data_frame_plots(errors_whole)
+(MSE_ols_whole = mean(error_ols_whole^2))
+(MSE_bart_whole = mean(error_bart_whole^2))
+
+# fitted with separated data
