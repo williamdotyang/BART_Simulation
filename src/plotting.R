@@ -48,7 +48,7 @@ plot_data_frame = function(dataset, var_name) {
 ###
 data_frame_plots = function(dataset, max_n=NA, plot_dim=NA) {
   # decide the plotting dimension
-  if (is.na(max_n) & is.na(plot_dim)) {
+  if (is.na(max_n) & sum(is.na(plot_dim))) {
     max_n = length(dataset[1, ]) - 2
     r = ceiling(sqrt(max_n))
     c = ceiling(max_n / r)
