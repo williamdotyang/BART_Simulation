@@ -26,13 +26,13 @@ plot_data_frame = function(dataset, var_name) {
            ylab=names(dataset)[length(names(dataset))], xlab=var_name, col=i)
     } else {
       points(x=dataset[, var_name][dataset[, 1]==label], 
-             y=dataset[, length(dataset[1, ])][dataset[, 1]==label], col=i)
+             y=dataset[, length(dataset[1, ])][dataset[, 1]==label], col=i, pch=i)
     }
     i = i + 1
   }
   
   if (i > 1) {
-    legend("topleft", legend=labels, pch=rep(1, length(labels)), col=1:i)
+    legend("topleft", legend=labels, col=1:i, pch=1:i)
   }
 }
 
