@@ -16,8 +16,8 @@ plot_data_frame = function(dataset, var_name) {
   
   labels = unique(dataset[, 1])
   for (label in labels) {
-    print(label)
-    print(var_name)
+    #print(var_name)
+    #print(label)
     if (i == 1) {
       plot(x=dataset[, var_name][dataset[, 1]==label], 
            y=dataset[, length(dataset[1, ])][dataset[, 1]==label], 
