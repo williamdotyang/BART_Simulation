@@ -63,7 +63,8 @@ get_std = function(data_train, data_test) {
   X_test_std = X_test #to be substituted by stded rows
   labels = unique(Z_train)
   for (label in labels) {
-    Xlab_pool = rbind(subset(X_train, Z==label), subset(X_test, Z==label))
+    Xlab_pool = rbind(subset(X_train, Z_train==label), 
+                      subset(X_test, Z_test==label))
     Xlab_pool_std = scale(Xlab_pool)
     
     #split train and test
@@ -72,13 +73,13 @@ get_std = function(data_train, data_test) {
                                     (sum(Z_train==label)+sum(Z_test==label)), ]
     
     #insert std values into original places
-    X_train_std[Z_train==label, ] = Xlab_std_train
+    X_train_std[Z_train==label, ] = Xlab_train_std
     X_test_std[Z_test==label, ] = Xlab_test_std
   }
   
   list_obj = list()
-  list_obj$train = data.frame(Z=Z_train, X=X_train_std, Y=Y_train)
-  list_obj$test = data.frame(Z=Z_test, X=X_test_std, Y=Y_test)
+  list_obj$train = data.frame(Z=Z_train, X_train_std, Y=Y_train)
+  list_obj$test = data.frame(Z=Z_test, X_test_std, Y=Y_test)
   return(list_obj)
 }
 
