@@ -1,6 +1,6 @@
 ################################################################################
 ## This file contains functions for generating simulation datasets.
-## ALL the parameter setting are done in "param_list.R".
+## ALL the parameter setting are done in "./congig/param_list*".
 ## DO NOT change unless for simulation scheme changes.
 ################################################################################
 
