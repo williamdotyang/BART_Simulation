@@ -30,6 +30,6 @@ MUS = c(2, 2, 2)
 
 ### specify the covariance matrix
 #should be the same for all treatment_lable
-SIGMA = matrix(nrow=n0, c(1, 0, 0, 
-                          0, 1, 0, 
-                          0, 0, 1))
+SIGMA = matrix(nrow=n0, c(1, 0.5, 0.5, 
+                          0.5, 1, 0.5, 
+                          0.5, 0.5, 1))
