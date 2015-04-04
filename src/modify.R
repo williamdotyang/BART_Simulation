@@ -42,11 +42,43 @@ get_nonovl = function(dataset, variable, direction, percentile) {
 
 ###
 # Standardize the covariates, leave treatment label and response variable
-# untouched.
+# untouched. When standardizing, training and test data are put together.
 #
-# @param dataset The original full data.frame.
+# @param dataset_train The training dataset to be standardized.
+# @param dataset_test The test dataset to be standardized.
+#
+# @return A list of two dataset, standardized training and standardized testing.
 ###
-get_std = function() {
+get_std = function(data_train, data_test) {
+  #data extraction
+  Z_train = data_train[ , 1]
+  Z_test = data_test[ , 1]
+  X_train = data_train[ , 2:(length(data_train[1, ]) - 1)]
+  X_test = data_test[ , 2:(length(data_test[1, ]) - 1)]
+  Y_train = data_train[ , length(data_train[1, ])]
+  Y_test = data_test[ , length(data_test[1, ])]
   
+  #standardize X
+  X_train_std = X_train #to be substituted by stded rows
+  X_test_std = X_test #to be substituted by stded rows
+  labels = unique(Z_train)
+  for (label in labels) {
+    Xlab_pool = rbind(subset(X_train, Z==label), subset(X_test, Z==label))
+    Xlab_pool_std = scale(Xlab_pool)
+    
+    #split train and test
+    Xlab_train_std = Xlab_pool_std[1:sum(Z_train==label), ]
+    Xlab_test_std = Xlab_pool_std[(sum(Z_train==label)+1):
+                                    (sum(Z_train==label)+sum(Z_test==label)), ]
+    
+    #insert std values into original places
+    X_train_std[Z_train==label, ] = Xlab_std_train
+    X_test_std[Z_test==label, ] = Xlab_test_std
+  }
+  
+  list_obj = list()
+  list_obj$train = data.frame(Z=Z_train, X=X_train_std, Y=Y_train)
+  list_obj$test = data.frame(Z=Z_test, X=X_test_std, Y=Y_test)
+  return(list_obj)
 }
 
