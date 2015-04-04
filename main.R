@@ -24,23 +24,31 @@ dataZ1_test = simulation(N=300)
 
 ### data modification
 source("./src/modify.R")
-# standardize
-# dataZ0_std = get_std(dataZ0)
-# dataZ1_std = get_std(dataZ1)
-
-# produce non-overlapping data
-# dataZ0_nonovl = get_nonovl(dataset=dataZ0, variable=, direction=, percentile=)
-# dataZ1_nonovl = get_nonovl(dataset=dataZ1, variable=, direction=, percentile=)
 
 # combind the data with different treatment labels
 data_train = rbind(dataZ0_train, dataZ1_train)
 data_test = rbind(dataZ0_test, dataZ1_test)
 
+# standardize
+std_obj = get_std(data_train, data_test)
+data_train_std = std_obj$train
+data_test_std = std_obj$test
+
+# produce non-overlapping data
+# dataZ0_nonovl = get_nonovl(dataset=dataZ0, variable=, direction=, percentile=)
+# dataZ1_nonovl = get_nonovl(dataset=dataZ1, variable=, direction=, percentile=)
+
 
 ### plot the data
 source("./src/plotting.R")
+# plot original data
 data_frame_plots(dataset=data_train, max_n=3, plot_dim=c(1,3))
 
 
 ### compare linear regression and BART 
+# replace original data with the X's been stded
+data_train = data_train_std
+data_test = data_test_std
+# plot stded data
+data_frame_plots(dataset=data_train, max_n=3, plot_dim=c(1,3))
 source("./applications/ols_bart.R")
