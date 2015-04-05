@@ -32,4 +32,4 @@ MUS = rep(2, n0)
 
 ### specify the covariance matrix
 # should be the same for all treatment_lable, only need to assign once
-SIGMA = matrixmatrix(rep(0.5, 100), nrow=10, ncol=10) + diag(0.5, 10)
+#SIGMA = matrix(rep(0.5, 100), nrow=10, ncol=10) + diag(0.5, 10)
