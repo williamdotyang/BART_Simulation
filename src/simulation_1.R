@@ -66,6 +66,63 @@ simulation = function(n=n0, N=N0,
 }
 
 
+##
+# From x_i's choose given number of pairs of 2-way interactions, 
+# creates a dataframe for indexes indicating the interaction terms. This avoids
+# creating the quadratic term.
+#
+# @param n The number of covariates.
+# @param term The number of interactions to be created.
+#
+# @return A data.frame of [first, second], indicating the indicies of x_i's.
+##
+choose2inter = function(n, term) { 
+  flag = T
+  while(flag) {
+    first = sample(n, term)
+    second = sample(n, term)
+    
+    flag = F
+    for (i in 1:term) {
+      if (length(unique(c(first[i], second[i]))) < 2) {
+        flag = T
+      }
+    }
+  }
+  
+  return(data.frame(first, second))
+}
+
+
+##
+# From x_i's choose given number of pairs of 3-way interactions, 
+# creates a dataframe for indexes indicating the interaction terms. This avoids
+# creating cubic terms.
+#
+# @param n The number of covariates.
+# @param term The number of interactions to be created.
+#
+# @return A data.frame of [first, second, third], 
+# indicating the indicies of x_i's.
+##
+choose3inter = function(n=3, term=1) { 
+  flag = T
+  while(flag) {
+    first = sample(n, term)
+    second = sample(n, term)
+    third = sample(n, term)
+    
+    flag = F
+    for (i in 1:term) {
+      if (length(unique(c(first[i], second[i], third[i]))) < 3) {
+        flag = T
+      }
+    }
+  }
+  
+  return(data.frame(first, second, third))
+}
+
 #### test code
 ##import the default parameter settings
 #source("./param_list1.R")
