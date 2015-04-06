@@ -10,13 +10,13 @@ source("./src/simulation_1.R")
 
 ### create raw data, in case of Z=0 & 1
 # data matrix for Z=0
-source("./config/param_list0-1.R")
+source("./config/param_list10X-Z0.R")
 # the number of generated observations 
 dataZ0_train = simulation()
 dataZ0_test = simulation(N=300)
 
 # data matrix for Z=1
-source("./config/param_list1-1.R")
+source("./config/param_list10X-Z1.R")
 # the number of generated observations
 dataZ1_train = simulation()
 dataZ1_test = simulation(N=300)
@@ -42,7 +42,7 @@ data_test_std = std_obj$test
 ### plot the data
 source("./src/plotting.R")
 # plot original data
-data_frame_plots(dataset=data_train, max_n=3, plot_dim=c(1,3))
+data_frame_plots(dataset=data_train, range=1:3, plot_dim=c(1,3))
 
 
 ### compare linear regression and BART 
@@ -50,5 +50,5 @@ data_frame_plots(dataset=data_train, max_n=3, plot_dim=c(1,3))
 data_train = data_train_std
 data_test = data_test_std
 # plot stded data
-data_frame_plots(dataset=data_train, max_n=3, plot_dim=c(1,3))
+data_frame_plots(dataset=data_train, range=1:3, plot_dim=c(1,3))
 source("./applications/ols_bart.R")
