@@ -10,7 +10,7 @@ TREATMENT_LABEL = 0
 # only need to assign once
 n0 = 20
 # number of observations
-N0 = 500
+N0 = 1000
 
 ### make up intercept coefficients
 BETA0 = 0
