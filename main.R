@@ -50,7 +50,6 @@ dataZ0_test = dataZ0_test_std
 dataZ1_test = dataZ1_test_std
 #***********IF DONT WANT TO STANDARDIZE, COMMENT OUT THIS BLOCK****************#
 
-
 ## produce non-overlapping data
 miss_index0 = get_nonovl_indicies(dataZ0_train, "X1", "upper", percentile=0.2)
 miss_index1 = get_nonovl_indicies(dataZ1_train, "X1", "lower", percentile=0.2)
@@ -58,6 +57,7 @@ dataZ0_nonovl = dataZ0_train[-miss_index0, ]
 dataZ1_nonovl = dataZ1_train[-miss_index1, ]
 dataZ0_deleted = dataZ0_train[miss_index0, ]
 dataZ1_deleted = dataZ1_train[miss_index1, ]
+
 data_train_nonovl = rbind(dataZ0_nonovl, dataZ1_nonovl)
 data_test_nonovl = rbind(dataZ0_deleted, dataZ1_deleted)
 
