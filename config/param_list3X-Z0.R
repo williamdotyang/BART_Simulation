@@ -19,7 +19,7 @@ BETA0 = 0
 BETA1 = c(2, 2, 2)
 ### make up 2nd order interaction index dataframe for x's, and their coefficients
 # INTER should be the same for all treatment_lable, only need to assign once
-INTER2 = data.frame(first=c(1,2,3), second=c(3,2,1))
+INTER2 = data.frame(first=c(1,2,3), second=c(3,1,2))
 BETA2 = c(1, 1, 1)
 ### make up 3nd order interaction index dataframe for x's, and their coefficients
 # INTER should be the same for all treatment_lable
