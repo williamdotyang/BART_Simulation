@@ -11,32 +11,25 @@
 # to be deleted.
 # @param percentile The percentile(always < 50%) to be deleted.
 #
-# @return A data.frame where the cases deleted. 
+# @return A vector of indicies of observations to be deleted in dataset.
 ###
-get_nonovl = function(dataset, variable, direction, percentile) {
+get_nonovl_indicies = function(dataset, variable, direction, percentile) {
   # to be stored with deleted observations' indicies
   missing_indicies = NULL
   
   for (i in 1:length(dataset[ ,1])) {
     if (direction == "upper") {
-      if (dataset[i, variable] >= qnorm(0.8, mean=MUS[1], sd=sqrt(SIGMA[1,1]))) {
-        # by probability of miss_p
-        #if (rbinom(1, 1, miss_prob) == 1) {
+      if (dataset[i, variable] >= quantile(dataset[, variable], 1-percentile)) {
         missing_indicies = c(missing_indicies, i)
-        #}
       }
-      # for Z=1
     } else {
-      # X1 which is in lower 25% is subject to missing 
-      if (data$X1[i] <= qnorm(0.2, mean=MUS[1], sd=sqrt(SIGMA[1,1]))) {
-        # by probability of miss_p
-        #if (rbinom(1, 1, miss_prob) == 1) {
+      if (dataset[i, variable] <= quantile(dataset[, variable], percentile)) {
         missing_indicies = c(missing_indicies, i)
-        #}
       }
     }
   }
-  return(dataset[-missing_indicies, ])
+  
+  return(missing_indicies)
 }
 
 
