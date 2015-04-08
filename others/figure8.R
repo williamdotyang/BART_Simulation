@@ -30,3 +30,14 @@ lines(x, bart_separate1000, lty=2, col=2)
 legend("topright", lty=c(1,1,2,2), col=c(1,2,1,2), 
        legend=c("OLS whole", "OLS separate", "BART whole", "BART separate"))
 
+
+## Figure 19
+x = c(3, 10, 30)
+whole = c(578.81, 2473.057, 10314.72)
+sep = c(146.41, 830.40, 1077.10)
+plot(x, whole, xlab="number of X's", ylab="MSE", pch=NA)
+points(x, whole, pch=1)
+points(x, sep, pch=2)
+lines(x, whole, lty=2)
+lines(x, sep)
+legend("topleft", legend=c("BART whole", "BART separate"), lty=c(2,1), pch=c(1,2))
