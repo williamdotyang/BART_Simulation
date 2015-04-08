@@ -42,7 +42,7 @@ get_nonovl_indicies = function(dataset, variable, direction, percentile) {
 #
 # @return A list of two dataset, standardized training and standardized testing.
 ###
-get_std = function(data_train, data_test) {
+get_pooled_std = function(data_train, data_test) {
   #data extraction
   Z_train = data_train[ , 1]
   Z_test = data_test[ , 1]
@@ -76,3 +76,32 @@ get_std = function(data_train, data_test) {
   return(list_obj)
 }
 
+
+###
+# Standardize the covariates, leave treatment label and response variable
+# untouched, using only one set of data.
+#
+# @param dataset The dataset to be standardized.
+#
+# @return A data.frame of standardized dataset, each label stacked.
+###
+get_solo_std = function(dataset) {
+  #data extraction
+  Z = dataset[ , 1]
+  X = dataset[ , 2:(length(dataset[1, ]) - 1)]
+  Y = dataset[ , length(dataset[1, ])]
+  
+  #standardize X
+  X_std = X #to be substituted by stded rows
+  labels = unique(Z)
+  for (label in labels) {
+    Xlab_solo = subset(X, Z==label)
+    Xlab_solo_std = scale(Xlab_solo)
+    
+    #insert std values into original places
+    X_std[Z==label, ] = Xlab_solo_std
+  }
+  
+  dataset_std = data.frame(Z=Z, X_std, Y=Y)
+  return(dataset_std)
+}
