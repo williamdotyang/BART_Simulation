@@ -81,13 +81,13 @@ MSE_bart_extr_sep = mean(error_bart_extr_sep^2)
 # plot non-overlapping data
 data_frame_plots(data_train_nonovl, plot_range, plot_dim)
 # add extrapolated data points on non-overlapping data
-add_points(data_bart_extr_whole, plot_range, plot_dim)
+add_points(data_bart_extr_whole, plot_range, plot_dim, col="green")
 
 ## plot extrapolated data points from separately fitted BART
 # plot non-overlapping data
 data_frame_plots(data_train_nonovl, plot_range, plot_dim)
 # add extrapolated data points on non-overlapping data
-add_points(data_bart_extr_sep, plot_range, plot_dim)
+add_points(data_bart_extr_sep, plot_range, plot_dim, col="green")
 
 ## plot residuals
 methods = c(rep("wholly fitted", length(error_bart_extr_whole)),
