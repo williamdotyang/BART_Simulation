@@ -2,7 +2,12 @@
 # This script is to compare the OLS vs. BART on the data.
 ################################################################################
 
-# decompose datasets by variable names
+### plot original data
+source("./src/plotting.R")
+data_frame_plots(dataset=data_train_nonovl, range=1:3, plot_dim=c(1,3))
+
+
+### decompose datasets by variable names
 Y_train = data_train[ , length(data_train[1, ])]
 Z_train = data_train[ , 1]
 X_train = data_train[ , 2:(length(data_train[1, ]) - 1)]
