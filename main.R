@@ -23,6 +23,11 @@ source("./config/param_list3X-Z1.R")
 dataZ1_train = simulation()
 dataZ1_test = simulation(N=300)
 
+# when studying non-overlapping data, only use train dataset, the test dataset 
+# will split from the train dataset, according to the missingness indicies
+dataZ0_nonovl = dataZ0_train
+dataZ1_nonovl = dataZ1_train
+
 
 ###########################modifying data#######################################
 source("./src/modify.R")
@@ -31,35 +36,45 @@ source("./src/modify.R")
 data_train = rbind(dataZ0_train, dataZ1_train)
 data_test = rbind(dataZ0_test, dataZ1_test)
 
-std_obj = get_std(data_train, data_test)
-data_train_std = std_obj$train
-data_test_std = std_obj$test
+# std for the pooled data, pooling train & test of each of the same label
+pooled_std_obj = get_pooled_std(data_train, data_test)
+data_train_pooled_std = pooled_std_obj$train
+data_test_pooled_std = pooled_std_obj$test
 
-dataZ0_train_std = data_train_std[which(data_train_std$Z==0), ]
-dataZ1_train_std = data_train_std[which(data_train_std$Z==1), ]
-dataZ0_test_std = data_test_std[which(data_test_std$Z==0), ]
-dataZ1_test_std = data_test_std[which(data_test_std$Z==1), ]
+dataZ0_train_pooled_std = data_train_pooled_std[which(data_train_pooled_std$Z==0), ]
+dataZ1_train_pooled_std = data_train_pooled_std[which(data_train_pooled_std$Z==1), ]
+dataZ0_test_pooled_std = data_test_pooled_std[which(data_test_pooled_std$Z==0), ]
+dataZ1_test_pooled_std = data_test_pooled_std[which(data_test_pooled_std$Z==1), ]
+
+# std for only training data, the test data splits from the training data, using
+# the missingness indicies produced by get_nonovl_indicies()
+data_solo_std = get_solo_std(data_train)
+dataZ0_solo_std = data_solo_std[data_solo_std$Z==0, ]
+dataZ1_solo_std = data_solo_std[data_solo_std$Z==1, ]
+
 
 #***********IF DONT WANT TO STANDARDIZE, COMMENT OUT THIS BLOCK****************#
 # replace original data with the X's been stded
-data_train = data_train_std
-data_test = data_test_std
-dataZ0_train = dataZ0_train_std
-dataZ1_train = dataZ1_train_std
-dataZ0_test = dataZ0_test_std
-dataZ1_test = dataZ1_test_std
+data_train = data_train_pooled_std
+data_test = data_test_pooled_std
+dataZ0_train = dataZ0_train_pooled_std
+dataZ1_train = dataZ1_train_pooled_std
+dataZ0_test = dataZ0_test_pooled_std
+dataZ1_test = dataZ1_test_pooled_std
+dataZ0_nonovl = dataZ0_solo_std
+dataZ1_nonovl = dataZ1_solo_std
 #***********IF DONT WANT TO STANDARDIZE, COMMENT OUT THIS BLOCK****************#
 
 ## produce non-overlapping data
-miss_index0 = get_nonovl_indicies(dataZ0_train, "X1", "upper", percentile=0.2)
-miss_index1 = get_nonovl_indicies(dataZ1_train, "X1", "lower", percentile=0.2)
-dataZ0_nonovl = dataZ0_train[-miss_index0, ]
-dataZ1_nonovl = dataZ1_train[-miss_index1, ]
-dataZ0_deleted = dataZ0_train[miss_index0, ]
-dataZ1_deleted = dataZ1_train[miss_index1, ]
+miss_index0 = get_nonovl_indicies(dataZ0_nonovl, "X1", "upper", percentile=0.2)
+miss_index1 = get_nonovl_indicies(dataZ1_nonovl, "X1", "lower", percentile=0.2)
+dataZ0_train_nonovl = dataZ0_nonovl[-miss_index0, ]
+dataZ1_train_nonovl = dataZ1_nonovl[-miss_index1, ]
+dataZ0_test_nonovl = dataZ0_nonovl[miss_index0, ]
+dataZ1_test_nonovl = dataZ1_nonovl[miss_index1, ]
 
-data_train_nonovl = rbind(dataZ0_nonovl, dataZ1_nonovl)
-data_test_nonovl = rbind(dataZ0_deleted, dataZ1_deleted)
+data_train_nonovl = rbind(dataZ0_train_nonovl, dataZ1_train_nonovl)
+data_test_nonovl = rbind(dataZ0_test_nonovl, dataZ1_test_nonovl)
 
 
 ###########################applications on data#################################
