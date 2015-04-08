@@ -66,3 +66,33 @@ data_frame_plots = function(dataset, range=NA, plot_dim=NA) {
   
   par(mfrow=c(1,1))
 }
+
+###
+# Add points to current figure(s).
+#
+# @param dataset The data.frame to be plotted, containing Z, X's and Y.
+# @param range A set of indicies to be plotted.
+# @param plot_dim A vector indicating the plotting dimension.
+#
+# @return No return.
+###
+add_points = function(dataset, range, plot_dim, col="blue") {
+  par(mfrow=plot_dim)
+  
+  labels = unique(dataset[, 1])
+  for (i in range) {
+    # select subplot
+    par(mfg=c(1,i))
+    # reset pch starting value
+    pch=1
+    
+    for (label in labels) {
+      points(dataset[dataset[, 1]==label, 1+i], 
+             dataset[dataset[, 1]==label, length(dataset[1, ])], 
+             col=col, pch=pch)
+      pch = pch + 1
+    }
+  }
+  
+  par(mfrow=c(1,1))
+}
