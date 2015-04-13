@@ -4,7 +4,7 @@
 
 ### plot original data
 source("./src/plotting.R")
-data_frame_plots(dataset=data_train_nonovl, range=1:3, plot_dim=c(1,3))
+data_frame_plots(dataset=data_train, range=1:3, plot_dim=c(1,3))
 
 
 ### decompose datasets by variable names
